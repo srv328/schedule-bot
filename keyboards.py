@@ -93,7 +93,7 @@ parity_buttons = [[create_text_button("Чётная🍉", "even_week"), create_t
 parity_markup = create_keyboard_markup(parity_buttons, True)
 
 manage_markup = create_keyboard_markup([[create_text_button("Удалить пару🗑", "delete_pair"),
-                                         create_text_button("Назад🔙", "back_to_manage_day")]])
+                                         create_text_button("Назад🔙", "back_to_manage_day")]], True)
 
 lesson_type = [
     [create_text_button("Практика💻"), create_text_button("Лекция✏️")],
