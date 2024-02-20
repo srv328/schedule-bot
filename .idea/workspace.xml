@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="61404b3f-e3c4-42d4-aac1-3531e04cc3fa" name="Changes" comment="" />
+    <list default="true" id="61404b3f-e3c4-42d4-aac1-3531e04cc3fa" name="Changes" comment="initial commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/keyboards.py" beforeDir="false" afterPath="$PROJECT_DIR$/keyboards.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/clear_schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/clear_schedule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/editing.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/editing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/next_lesson.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/next_lesson.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/start_command.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/start_command.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/week_schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/week_schedule.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,6 +82,14 @@
       <option name="presentableId" value="Default" />
       <updated>1708434427703</updated>
     </task>
+    <task id="LOCAL-00001" summary="initial commit">
+      <created>1708434993761</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1708434993761</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -81,5 +102,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="initial commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
   </component>
 </project>
