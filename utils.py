@@ -5,7 +5,8 @@ from aiogram import Bot
 from aiogram.enums import ParseMode
 from config import start_day, start_month, token
 from aiogram.types import Message, FSInputFile
-from work_with_db import has_schedule, get_schedule_by_day_offset, get_lesson_by_params_with_user, execute_query, get_existing_lessons
+from work_with_db import has_schedule, get_schedule_by_day_offset, get_lesson_by_params_with_user,\
+    execute_query, get_existing_lessons
 import os
 from openpyxl.styles import PatternFill
 import openpyxl
