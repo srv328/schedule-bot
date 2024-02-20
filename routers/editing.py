@@ -1,21 +1,17 @@
 from aiogram.types import CallbackQuery, KeyboardButton, ReplyKeyboardMarkup
-from aiogram import Router, F, Bot
+from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from utils import get_number_of_subject_emoji, day_translation, day_of_week_dict, get_lesson_info, \
-    day_translation_form, get_available_lesson_times
-from config import token
+    day_translation_form, get_available_lesson_times, bot
 from contextlib import suppress
 from aiogram.exceptions import TelegramBadRequest
 from work_with_db import get_schedule_by_day_offset, delete_lesson_by_params, add_lesson_to_schedule
 from keyboards import parity_markup, days_markup, manage_markup, yes_no_button, lesson_type_markup, \
     lesson_priority_markup, cancel_markup, schedule_markup
-from aiogram.filters import Command
-
-bot = Bot(token=token)
 
 
 router = Router()
@@ -37,7 +33,6 @@ class AddLesson(StatesGroup):
     Final = State()
 
 
-@router.message(Command("cancel"))
 @router.message(F.text == "Пропустить добавление♻️")
 async def cancel_handler(message: Message, state: FSMContext) -> None:
     current_state = await state.get_state()
@@ -104,7 +99,6 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
 
     await state.update_data(query=query)
     await state.set_state(Edit.day)
-    print('я тут')
     if not schedule_data:
         builder.button(
             text="Добавить пару ✳️",
@@ -435,8 +429,7 @@ async def incorrect_process_teacher_name(message: Message, state: FSMContext):
     )
 
 
-@router.message(AddLesson.LessonType, F.text, F.text.in_(['Практика💻',
-                                                          'Лекция✏️']))
+@router.message(AddLesson.LessonType, F.text, F.text.in_(['Практика💻', 'Лекция✏️']))
 async def process_lesson_type(message: Message, state: FSMContext):
     lesson_type = message.text
     # Здесь вы можете добавить валидацию и обработку введенных данных
@@ -459,9 +452,7 @@ async def incorrect_process_lesson_type(message: Message, state: FSMContext):
     )
 
 
-@router.message(AddLesson.Evaluation, F.text, F.text.in_(['Зачёт🍎',
-                                                          'Экзамен🍊',
-                                                          'Зачёт с оценкой🍐']))
+@router.message(AddLesson.Evaluation, F.text, F.text.in_(['Зачёт🍎', 'Экзамен🍊', 'Зачёт с оценкой🍐']))
 async def process_evaluation(message: Message, state: FSMContext):
     evaluation = message.text
     await state.update_data(evaluation=evaluation)
@@ -519,6 +510,15 @@ async def process_classroom(message: Message, state: FSMContext):
     await state.set_state(AddLesson.Final)
 
 
+@router.message(AddLesson.Classroom)
+async def incorrect_process_classroom(message: Message, state: FSMContext):
+    await message.answer(
+        text="<b>Слишком длинное название аудитории!</b>",
+        parse_mode=ParseMode.HTML,
+        reply_markup=cancel_markup
+    )
+
+
 @router.message(AddLesson.Final, F.text == 'Добавить пару🐣')
 async def adding_to_database(message: Message, state: FSMContext):
     data = await state.get_data()
@@ -529,22 +529,11 @@ async def adding_to_database(message: Message, state: FSMContext):
     day_offset_base = {'monday': 1, 'tuesday': 2, 'wednesday': 3, 'thursday': 4, 'friday': 5, 'saturday': 6}
     day_offset = day_offset_base[selected_day]
     week_parity_id = (day_offset, week_parity)
-    week = [(1, 0),
-            (2, 0),
-            (3, 0),
-            (4, 0),
-            (5, 0),
-            (6, 0),
-            (1, 1),
-            (2, 1),
-            (3, 1),
-            (4, 1),
-            (5, 1),
-            (6, 1)]
+    week = [(1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1)]
     week_parity_id = week.index(week_parity_id) + 1
     time = data.get('time')
-    lesson_times = ['8:30 - 10:00', '10:10 - 11:40', '11:50 - 13:20',
-                    '13:30 - 15:00', '15:10 - 16:40', '16:50 - 18:20', '18:30 - 20:00', '20:10 - 21:40']
+    lesson_times = ['8:30 - 10:00', '10:10 - 11:40', '11:50 - 13:20', '13:30 - 15:00',
+                    '15:10 - 16:40', '16:50 - 18:20', '18:30 - 20:00', '20:10 - 21:40']
     lesson_number_for_time = lesson_times.index(time) + 1
     subject = data.get('subject')
     teacher_name = data.get('teacher_name')
@@ -554,34 +543,13 @@ async def adding_to_database(message: Message, state: FSMContext):
 
     evaluation = data.get('evaluation')
 
-    evaluation_mapping = {
-        'Зачёт🍎': 0,
-        'Экзамен🍊': 1,
-        'Зачёт с оценкой🍐': 2,
-    }
+    evaluation_mapping = {'Зачёт🍎': 0, 'Экзамен🍊': 1, 'Зачёт с оценкой🍐': 2}
 
     evaluation = evaluation_mapping.get(evaluation, None)
 
     classroom = data.get('classroom')
     query = data.get('query')
     user_id = query.from_user.id
-    print(user_id)
-    print(week_parity_id)
-    print(teacher_name)
-    print(subject)
-    print(lesson_type)
-    print(evaluation)
-    print(classroom)
-    print(lesson_number_for_time)
     add_lesson_to_schedule(user_id, week_parity_id, teacher_name, subject, lesson_type,
                            evaluation, classroom, lesson_number_for_time)
     await select_week_day(query, state, True, False, True)
-
-
-@router.message(AddLesson.Classroom)
-async def incorrect_process_classroom(message: Message, state: FSMContext):
-    await message.answer(
-        text="<b>Слишком длинное название аудитории!</b>",
-        parse_mode=ParseMode.HTML,
-        reply_markup=cancel_markup
-    )

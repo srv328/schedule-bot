@@ -1,11 +1,10 @@
-from aiogram import Router, F, Bot
+from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, FSInputFile
-from config import token
+from utils import bot
 from aiogram.enums.parse_mode import ParseMode
 from keyboards import clear_button, schedule_markup
 from work_with_db import has_schedule, execute_query
 
-bot = Bot(token=token)
 
 router = Router()
 

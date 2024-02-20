@@ -1,16 +1,14 @@
-from aiogram import Router, F, Bot
+from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from aiogram.enums.parse_mode import ParseMode
 from work_with_db import get_schedule_by_day_offset
-from utils import generate_schedule_response, get_week_parity, get_week_title, get_days_of_week, day_translation_form
+from utils import generate_schedule_response, get_week_parity, get_week_title, \
+    get_days_of_week, day_translation_form, bot
 from contextlib import suppress
 from aiogram.exceptions import TelegramBadRequest
 from keyboards import week_markup, schedule_markup, menu_markup, days_markup, back_button_this, back_button_next
-from config import token
-
-bot = Bot(token=token)
 
 router = Router()
 

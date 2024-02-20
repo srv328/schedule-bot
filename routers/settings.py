@@ -1,4 +1,4 @@
-from aiogram import Bot, F, Router
+from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from contextlib import suppress
 from aiogram.enums.parse_mode import ParseMode
@@ -7,11 +7,9 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.exceptions import TelegramBadRequest
 from work_with_db import get_current_notifications_status, update_notifications, update_notifications_status, \
     get_current_notifications, get_schedule_statistics
-from config import token
 from keyboards import settings_markup, savings_markup
-from utils import export_schedule_to_txt, create_excel_schedule
+from utils import export_schedule_to_txt, create_excel_schedule, bot
 
-bot = Bot(token=token)
 router = Router()
 
 

@@ -1,18 +1,15 @@
-from aiogram import Router, F, Bot
+from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
-from config import token
 import re
 from aiogram.enums.parse_mode import ParseMode
 from work_with_db import get_schedule_by_day_offset
 from utils import get_number_of_week, get_week_parity, generate_schedule_response, \
     format_time, format_time_str, get_next_two_weeks_dates
 from datetime import datetime
-
 from keyboards import next_lesson_markup, schedule_markup
 
-bot = Bot(token=token)
 
 router = Router()
 
