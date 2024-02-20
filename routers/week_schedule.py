@@ -3,12 +3,14 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from aiogram.enums.parse_mode import ParseMode
+from config import admins
 from work_with_db import get_schedule_by_day_offset
 from utils import generate_schedule_response, get_week_parity, get_week_title, \
     get_days_of_week, day_translation_form, bot
 from contextlib import suppress
 from aiogram.exceptions import TelegramBadRequest
-from keyboards import week_markup, schedule_markup, menu_markup, days_markup, back_button_this, back_button_next
+from keyboards import week_markup, schedule_markup, menu_markup, days_markup, \
+    back_button_this, back_button_next, admin_markup
 
 router = Router()
 
@@ -19,7 +21,10 @@ class WeekSelectionState(StatesGroup):
 
 @router.message(F.text == "Главное меню🔙")
 async def schedule(message: Message):
-    await message.answer("Возвращаемся в главное меню♻️", reply_markup=menu_markup)
+    if str(message.from_user.id) in admins:
+        await message.answer("Возвращаемся в главное меню♻️", reply_markup=admin_markup)
+    else:
+        await message.answer("Возвращаемся в главное меню♻️", reply_markup=menu_markup)
 
 
 @router.message(F.text == "На неделю🗂")
