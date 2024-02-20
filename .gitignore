@@ -2,3 +2,4 @@ config.py
 query.sql
 requirements.txt
 database.db
+.idea
