@@ -5,7 +5,7 @@ from config import token
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram import Bot, Dispatcher
 from routers import start_command, inline, accont_info, faq, statistic, today_schedule, tomorrow_schedule, settings, \
-    week_schedule, clear_schedule, next_lesson, editing
+    week_schedule, clear_schedule, next_lesson, editing, admin_panel
 
 
 async def main():
@@ -22,7 +22,8 @@ async def main():
                        week_schedule.router,
                        clear_schedule.router,
                        next_lesson.router,
-                       editing.router)
+                       editing.router,
+                       admin_panel.router)
 
     await dp.start_polling(bot)
 
