@@ -19,7 +19,7 @@ async def clear_schedule(message: Message):
         await message.answer(text="<b>Расписание пустое, нечего очищать!</b>",
                              parse_mode=ParseMode.HTML,
                              reply_markup=schedule_markup)
-        gif = FSInputFile("media/los.mp4")
+        gif = FSInputFile("media/лосяш.mp4")
         await message.answer_video(gif)
 
 

@@ -13,7 +13,7 @@ router = Router()
 @router.message(F.text == "Админ панель💀")
 async def admin_panel(message: Message):
     if str(message.from_user.id) not in admins:
-        gif = FSInputFile("media/admin.mp4")
+        gif = FSInputFile("media/админ.mp4")
         await message.answer('<b>Куда мы лезем?</b>', parse_mode=ParseMode.HTML)
         await message.answer_video(gif)
         return
@@ -23,7 +23,7 @@ async def admin_panel(message: Message):
 @router.message(F.text == "Начать рассылку📖")
 async def start_sending(message: Message):
     if str(message.from_user.id) not in admins:
-        gif = FSInputFile("media/admin.mp4")
+        gif = FSInputFile("media/админ.mp4")
         await message.answer('<b>Куда мы лезем?</b>', parse_mode=ParseMode.HTML)
         await message.answer_video(gif)
         return
@@ -33,7 +33,7 @@ async def start_sending(message: Message):
 @router.message(F.text == "Выгрузить БД🗄")
 async def export_database(message: Message):
     if str(message.from_user.id) not in admins:
-        gif = FSInputFile("media/admin.mp4")
+        gif = FSInputFile("media/админ.mp4")
         await message.answer('<b>Куда мы лезем?</b>', parse_mode=ParseMode.HTML)
         await message.answer_video(gif)
         return
@@ -50,7 +50,7 @@ async def export_database(message: Message):
 @router.message(F.text == "Выгрузить лог🗒")
 async def export_database(message: Message):
     if str(message.from_user.id) not in admins:
-        gif = FSInputFile("media/admin.mp4")
+        gif = FSInputFile("media/админ.mp4")
         await message.answer('<b>Куда мы лезем?</b>', parse_mode=ParseMode.HTML)
         await message.answer_video(gif)
         return
@@ -62,4 +62,3 @@ async def export_database(message: Message):
             await message.answer("<b>Лог пустой!</b>", parse_mode=ParseMode.HTML)
     else:
         await message.answer("<b>Не удалось выгрузить лог!</b>", parse_mode=ParseMode.HTML)
-
