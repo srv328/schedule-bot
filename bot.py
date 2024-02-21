@@ -28,7 +28,7 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(level=logging.DEBUG,
                         stream=sys.stdout,
                         format='%(asctime)s - %(message)s',
                         datefmt='%d-%b-%y %H:%M:%S')
