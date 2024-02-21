@@ -3,3 +3,4 @@ query.sql
 requirements.txt
 database.db
 .idea
+logs.log
