@@ -319,12 +319,14 @@ async def add_lesson(query: CallbackQuery, state: FSMContext):
     week_parity_int = 0 if week_parity == 'even_week' else 1
 
     available_lesson_times = get_available_lesson_times(query.from_user.id, day_offset, week_parity_int)
+    formatted_intervals = [f'{start} - {end}' for start, end in available_lesson_times]
 
     row_width = 4  # количество кнопок в одной строке
-
     for i in range(0, len(available_lesson_times), row_width):
         row = available_lesson_times[i:i + row_width]
         times.append([KeyboardButton(text=f"{start_time} - {end_time}") for start_time, end_time in row])
+
+    await state.update_data(availibale_times=formatted_intervals)
 
     times.append([KeyboardButton(text="Пропустить добавление♻️")])
     times_markup = ReplyKeyboardMarkup(keyboard=times, resize_keyboard=True, one_time_keyboard=True)
@@ -347,6 +349,14 @@ async def add_lesson(query: CallbackQuery, state: FSMContext):
                                             '20:10 - 21:40']))
 async def process_time(message: Message, state: FSMContext):
     time = message.text
+    data = await state.get_data()
+    available_times = data.get('availibale_times')
+
+    if time not in available_times:
+        await message.answer(text="<b>Пожалуйста, выберите время из предоставленных вариантов.</b>",
+                             parse_mode=ParseMode.HTML)
+        return
+
     await state.update_data(time=time)
     await message.answer(
         text="<b>Введите название предмета:</b>",
