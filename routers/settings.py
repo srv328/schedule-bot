@@ -134,7 +134,8 @@ async def xslx_schedule_sending(message: Message, state: FSMContext):
 
 
 @router.message(F.text == "Загрузить расписание♻️")
-async def backup_schedule(message: Message):
+async def backup_schedule(message: Message, state: FSMContext):
+    await state.set_state(ReturnButton.return_to_settings)
     user_id = message.from_user.id
     if not has_schedule(user_id) and not has_backup(user_id):
         await message.answer("У вас пока что нет расписания\n"
