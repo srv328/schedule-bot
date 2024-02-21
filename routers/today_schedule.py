@@ -16,7 +16,7 @@ async def get_schedule_today(message: Message):
     if current_day_of_week == 7:
         await message.answer("Сегодня воскресенье, а значит <b>ВЫХОДНООООЙ!</b>\nСильно не расслабляемся,"
                              " ведь завтра понедельник :)", parse_mode=ParseMode.HTML)
-        gif = FSInputFile("media/chill.mp4")
+        gif = FSInputFile("media/отдыхаем.mp4")
         await message.answer_video(gif)
         return
 
@@ -25,7 +25,7 @@ async def get_schedule_today(message: Message):
 
     if not current_schedule:
         await message.answer("Сегодня у Вас нет занятий, <b>отдыхаем!</b>", parse_mode=ParseMode.HTML)
-        gif = FSInputFile("media/today.mp4")
+        gif = FSInputFile("media/сегодня отдыхаем.mp4")
         await message.answer_video(gif)
         return
 

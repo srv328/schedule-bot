@@ -21,13 +21,13 @@ async def get_schedule_tomorrow(message: Message):
     if next_day_of_week_number == 7:
         await message.answer("Сегодня суббота, а значит завтра <b>ВЫХОДНООООЙ!</b>\nПриятного времяпрепровождения!",
                              parse_mode=ParseMode.HTML)
-        gif = FSInputFile("media/chill.mp4")
+        gif = FSInputFile("media/отдыхаем.mp4")
         await message.answer_video(gif)
         return
 
     if not tomorrow_schedule:
         await message.answer("Завтра у Вас нет занятий, <b>можете расслабиться!</b>", parse_mode=ParseMode.HTML)
-        gif = FSInputFile("media/tomorrow.mp4")
+        gif = FSInputFile("media/завтра отдыхаем.mp4")
         await message.answer_video(gif)
         return
 
