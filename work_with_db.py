@@ -4,6 +4,14 @@ from datetime import datetime
 from config import database_path
 
 
+def get_time_from_backup_schedule(user_id):
+    query = "SELECT backup_timestamp FROM backup_schedule WHERE user_id = ? LIMIT 1"
+    result = execute_query(query, user_id)
+
+    if result:
+        return result[0][0]
+
+
 def add_lesson_to_schedule(user_id, week_parity_id, tutor_name, subject_name, is_practice,
                            subject_priority, subject_place, lesson_time_id):
     query = """
@@ -147,8 +155,8 @@ def has_schedule(user_id):
     return execute_query(query, user_id)[0][0] > 0
 
 
-def get_schedule_statistics(user_id):
-    query = """
+def get_schedule_statistics(table, user_id):
+    query = f"""
         SELECT
             week_parity.day_of_week,
             COUNT(*) as num,
@@ -157,10 +165,10 @@ def get_schedule_statistics(user_id):
                 WHEN week_parity.is_odd_week = 1 THEN 'odd'
             END AS week_type
         FROM
-            schedule
-            INNER JOIN week_parity ON schedule.week_parity_id = week_parity.week_parity_id
+            {table}
+            INNER JOIN week_parity ON {table}.week_parity_id = week_parity.week_parity_id
         WHERE
-            schedule.user_id = ?
+            {table}.user_id = ?
         GROUP BY
             week_parity.day_of_week, week_type
     """
@@ -184,3 +192,39 @@ def get_registration_date(user_id):
         result = "Нет данных о регистрации"
 
     return formatted_date if formatted_date else result
+
+
+def create_backup(user_id, time):
+    select_query = "SELECT * FROM schedule WHERE user_id = ?"
+    rows_to_copy = execute_query(select_query, user_id)
+
+    insert_query = "INSERT INTO backup_schedule (user_id, week_parity_id, tutor_name, " \
+                   "subject_name, is_practice, subject_priority, subject_place, " \
+                   "lesson_time_id, backup_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+    for row in rows_to_copy:
+        execute_query(insert_query, user_id, row[1], row[2], row[3], row[4], row[5], row[6], row[7], time)
+
+
+def has_backup(user_id):
+    query = "SELECT COUNT(*) FROM backup_schedule WHERE user_id = ?"
+    return execute_query(query, user_id)[0][0] > 0
+
+
+def delete_backup(user_id):
+    query = "DELETE FROM backup_schedule WHERE user_id = ?"
+    execute_query(query, user_id)
+
+
+def load_schedule_from_backup(user_id):
+    delete_query = "DELETE FROM schedule WHERE user_id = ?"
+    execute_query(delete_query, user_id)
+
+    select_query = "SELECT * FROM backup_schedule WHERE user_id = ?"
+    rows_to_copy = execute_query(select_query, user_id)
+
+    insert_query = "INSERT INTO schedule (user_id, week_parity_id, tutor_name, subject_name, is_practice, " \
+                   "subject_priority, subject_place, lesson_time_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+    for row in rows_to_copy:
+        execute_query(insert_query, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
