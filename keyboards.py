@@ -25,7 +25,9 @@ admin_markup = create_keyboard_markup(menu_buttons + [[create_text_button("Ад�
 admin_buttons = [
     [create_text_button("Начать рассылку📖")],
     [create_text_button("Выгрузить БД🗄"),
-     create_text_button("Выгрузить лог🗒")]]
+     create_text_button("Выгрузить лог🗒")],
+    [create_text_button("Главное меню🔙")]
+]
 admin_actions = create_keyboard_markup(admin_buttons)
 
 settings_button = [
@@ -123,3 +125,15 @@ lesson_priority_markup = create_keyboard_markup(lesson_priority_buttons, False, 
 cancel_button = [[create_text_button("Пропустить добавление♻️")]]
 
 cancel_markup = create_keyboard_markup(cancel_button, False, True)
+
+backup_markup = create_keyboard_markup(
+    [
+            [create_text_button("Да✅", "yes_save"),
+             create_text_button("Нет❌", "no_save")]
+    ], True)
+
+confirm_backup = create_keyboard_markup(
+    [
+            [create_text_button("Да✅", "yes_backup"),
+             create_text_button("Нет❌", "no_backup")]
+    ], True)
