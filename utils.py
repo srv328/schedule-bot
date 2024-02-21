@@ -84,6 +84,17 @@ def get_lesson_info(user_id, subject_number, selected_day, week_parity):
     return message_text
 
 
+def get_formatted_date():
+    current_time_local = datetime.now(pytz.timezone('Asia/Vladivostok'))
+    month_names = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня",
+                   "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"]
+    month_name = month_names[current_time_local.month - 1]
+    formatted_date = f"{current_time_local.day} " \
+                     f"{month_name} {current_time_local.year} " \
+                     f"{current_time_local.hour:02d}-{current_time_local.minute:02d}-{current_time_local.second:02d}"
+    return formatted_date
+
+
 def get_number_of_week():
     current_time_local = datetime.now(pytz.timezone('Asia/Vladivostok'))
     return current_time_local
