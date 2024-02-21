@@ -1,7 +1,7 @@
 import sqlite3
 import pytz
 from datetime import datetime
-from config import path
+from config import database_path
 
 
 def add_lesson_to_schedule(user_id, week_parity_id, tutor_name, subject_name, is_practice,
@@ -31,7 +31,7 @@ def get_existing_lessons(user_id, day, week_parity):
 
 
 def execute_query(query, *params):
-    connection = sqlite3.connect(path)
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     try:
         cursor.execute(query, params)

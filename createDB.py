@@ -1,12 +1,12 @@
 import sqlite3
-from config import path, sql_path
+from config import database_path, sql_path
 
 
 def execute_query(query_path):
     with open(query_path, 'r', encoding='utf-8') as file:
         queries = file.read().split(';')
 
-    connection = sqlite3.connect(path)
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
     try:
