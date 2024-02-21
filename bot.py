@@ -28,8 +28,13 @@ async def main():
                        next_lesson.router,
                        editing.router,
                        admin_panel.router)
-
-    await dp.start_polling(bot)
+    try:
+        await dp.start_polling(bot)
+    except Exception as ex:
+        logging.error(f"[!!! Exception] - {ex}", exc_info=True)
+    finally:
+        await bot.session.close()
+        await dp.storage.close()
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG,
