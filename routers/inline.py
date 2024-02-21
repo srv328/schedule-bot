@@ -11,7 +11,7 @@ router = Router()
 async def default(query: InlineQuery):
     user_id = query.from_user.id
 
-    even_schedule, odd_schedule = get_schedule_statistics(user_id)
+    even_schedule, odd_schedule = get_schedule_statistics("schedule", user_id)
     replacements = (
         (f'Статистика <b>вашего</b> расписания 📊:', ''),
         ('В ДВФУ вы проведёте', 'В ДВФУ я проведу'),
