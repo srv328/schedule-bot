@@ -19,7 +19,14 @@ menu_buttons = [
 ]
 
 menu_markup = create_keyboard_markup(menu_buttons)
-admin_markup = create_keyboard_markup([[create_text_button("Админ панель💀")]] + menu_buttons)
+admin_markup = create_keyboard_markup(menu_buttons + [[create_text_button("Админ панель💀")]])
+
+
+admin_buttons = [
+    [create_text_button("Начать рассылку📖")],
+    [create_text_button("Выгрузить БД🗄"),
+     create_text_button("Выгрузить лог🗒")]]
+admin_actions = create_keyboard_markup(admin_buttons)
 
 settings_button = [
     [create_text_button("Уведомления🔔"),
