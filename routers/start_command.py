@@ -1,15 +1,13 @@
-from aiogram import Router
-from config import admins
-from keyboards import menu_markup, yes_no_button, admin_markup
+from aiogram import Router, types
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 from aiogram.enums.parse_mode import ParseMode
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
+from config import admins
+from keyboards import menu_markup, yes_no_button, admin_markup
 from work_with_db import check_user_exists, add_user_to_database, has_schedule, copy_schedule
 from utils import extract_unique_code, bot
-from aiogram.fsm.state import State
-from aiogram.fsm.state import StatesGroup
-from aiogram.fsm.context import FSMContext
-from aiogram import types
 
 
 class Share(StatesGroup):
