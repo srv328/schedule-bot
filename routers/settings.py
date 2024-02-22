@@ -228,9 +228,11 @@ async def load_from_backup(query: CallbackQuery, state: FSMContext):
     statistics_message = generate_schedule_statistics_message(even_schedule, odd_schedule)
     statistics_message = statistics_message.replace('Статистика <b>вашего</b> расписания 📊:',
                                                     'Статистика <b>вашего бекапа</b> 📊:', -1)
-    await query.message.answer(text=statistics_message+"\nХотите <b>загрузить</b> данное расписание?",
-                               parse_mode=ParseMode.HTML,
-                               reply_markup=confirm_backup)
+    await bot.edit_message_text(text=statistics_message+"\nХотите <b>загрузить</b> данное расписание?",
+                                chat_id=query.message.chat.id,
+                                message_id=query.message.message_id,
+                                parse_mode=ParseMode.HTML,
+                                reply_markup=confirm_backup)
 
 
 @router.callback_query(lambda query: query.data == 'no_backup')
@@ -259,3 +261,10 @@ async def add_backup(query: CallbackQuery, state: FSMContext):
 
     await bot.send_message(user_id, text="<b>Бэкап успешно загружен!🔄</b>",
                            parse_mode=ParseMode.HTML)
+    time_from_schedule = get_time_from_backup_schedule(user_id)
+    button = create_keyboard_markup([[create_text_button(time_from_schedule, "backup")],
+                                     [create_text_button("Обновить бэкап♻", "update")]], True)
+    await bot.send_message(query.message.chat.id,
+                           text="<b>У вас есть сохранённый бэкап:</b>",
+                           parse_mode=ParseMode.HTML,
+                           reply_markup=button)

@@ -42,7 +42,7 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
     data = await state.get_data()
     query = data.get('query')
     await state.set_state(Edit.day)
-    await select_week_day(query, state, True)
+    await select_week_day(message.from_user.id, message.chat.id, message.message_id, state, True)
 
 
 @router.message(F.text == "Редактировать✏️")
@@ -83,7 +83,8 @@ async def select_week_parity(query: CallbackQuery, state: FSMContext):
     await state.set_state(Edit.day)
 
 
-async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False, show=True, add=False):
+async def select_week_day(user_id: int, chat_id: int, message_id: int,
+                          state: FSMContext, cancel=False, show=True, add=False):
     data = await state.get_data()
     week_parity = data.get('week_parity')
     selected_day = data.get('day')
@@ -91,14 +92,12 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
     day_offset = day_offset_base[selected_day]
 
     week_parity_int = 0 if week_parity == 'even_week' else 1
-    schedule_data = get_schedule_by_day_offset(int(query.from_user.id), day_offset % 7, week_parity_int)
+
+    schedule_data = get_schedule_by_day_offset(user_id, day_offset % 7, week_parity_int)
 
     keyboard_buttons = []
 
     builder = InlineKeyboardBuilder()
-
-    await state.update_data(query=query)
-    await state.set_state(Edit.day)
     if not schedule_data:
         builder.button(
             text="Добавить пару ✳️",
@@ -117,8 +116,8 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
                     text=f"<i>Расписание на {day_translation_form.get(selected_day)} "
                          f"({'четную' if week_parity == 'even_week' else 'нечетную'}) неделю:</i> 📅\n"
                          f"<b>В этот день нет пар! Хотите добавить?</b>",
-                    chat_id=query.message.chat.id,
-                    message_id=query.message.message_id,
+                    chat_id=chat_id,
+                    message_id=message_id,
                     reply_markup=builder.as_markup(),
                     parse_mode=ParseMode.HTML
                 )
@@ -126,14 +125,14 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
                 if show:
                     await bot.send_message(
                         text=f"<b>Добавление отменено♻️</b>",
-                        chat_id=query.message.chat.id,
+                        chat_id=chat_id,
                         parse_mode=ParseMode.HTML,
                         reply_markup=schedule_markup
                     )
                 if add:
                     await bot.send_message(
                         text=f"<b>Пара успешно добавлена!🎉</b>",
-                        chat_id=query.message.chat.id,
+                        chat_id=chat_id,
                         reply_markup=schedule_markup,
                         parse_mode=ParseMode.HTML
                     )
@@ -141,7 +140,7 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
                     text=f"<i>Расписание на {day_translation_form.get(selected_day)} "
                          f"({'четную' if week_parity == 'even_week' else 'нечетную'}) неделю:</i> 📅\n"
                          f"<b>В этот день нет пар! Хотите добавить?</b>",
-                    chat_id=query.message.chat.id,
+                    chat_id=chat_id,
                     reply_markup=builder.as_markup(),
                     parse_mode=ParseMode.HTML
                 )
@@ -178,8 +177,8 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
                 await bot.edit_message_text(
                     text=f"<i>Расписание на {day_translation_form.get(selected_day)} "
                          f"({'четную' if week_parity == 'even_week' else 'нечетную'}) неделю:</i> 📅",
-                    chat_id=query.message.chat.id,
-                    message_id=query.message.message_id,
+                    chat_id=chat_id,
+                    message_id=message_id,
                     reply_markup=builder.as_markup(),
                     parse_mode=ParseMode.HTML
                 )
@@ -187,21 +186,21 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
                 if show:
                     await bot.send_message(
                         text=f"<b>Добавление отменено♻️</b>",
-                        chat_id=query.message.chat.id,
+                        chat_id=chat_id,
                         parse_mode=ParseMode.HTML,
                         reply_markup=schedule_markup
                     )
                 if add:
                     await bot.send_message(
                         text=f"<b>Пара успешно добавлена!🎉</b>",
-                        chat_id=query.message.chat.id,
+                        chat_id=chat_id,
                         reply_markup=schedule_markup,
                         parse_mode=ParseMode.HTML
                     )
                 await bot.send_message(
                     text=f"<i>Расписание на {day_translation_form.get(selected_day)} "
                          f"({'четную' if week_parity == 'even_week' else 'нечетную'}) неделю:</i> 📅",
-                    chat_id=query.message.chat.id,
+                    chat_id=chat_id,
                     reply_markup=builder.as_markup(),
                     parse_mode=ParseMode.HTML
                 )
@@ -211,7 +210,7 @@ async def select_week_day(query: CallbackQuery, state: FSMContext, cancel=False,
                        Edit.day)
 async def edit_day(query: CallbackQuery, state: FSMContext):
     await state.update_data(day=query.data)
-    await select_week_day(query, state)
+    await select_week_day(query.from_user.id, query.message.chat.id, query.message.message_id, state)
 
 
 @router.callback_query(lambda query: query.data.startswith('back_to_edit_week'))
@@ -265,7 +264,7 @@ async def delete_lesson(query: CallbackQuery, state: FSMContext):
 
 @router.callback_query(lambda query: query.data == 'back_to_manage_day')
 async def back_to_manage_week(query: CallbackQuery, state: FSMContext):
-    await select_week_day(query, state)
+    await select_week_day(query.from_user.id, query.message.chat.id, query.message.message_id, state)
 
 
 @router.callback_query(lambda query: query.data == 'yes', Edit.lesson)
@@ -282,7 +281,7 @@ async def apply_delete(query: CallbackQuery, state: FSMContext):
     delete_lesson_by_params(int(query.from_user.id), subject_number, day_offset % 7, week_parity_int)
 
     await query.answer("Пара успешно удалена!")
-    await select_week_day(query, state)
+    await select_week_day(query.from_user.id, query.message.chat.id, query.message.message_id, state)
 
 
 @router.callback_query(lambda query: query.data == 'no', Edit.lesson)
@@ -296,7 +295,7 @@ async def cancel_delete(query: CallbackQuery, state: FSMContext):
     day_offset = day_offset_base[selected_day]
 
     week_parity_int = 0 if week_parity == 'even_week' else 1
-    print(subject_number, day_offset, week_parity)
+
     await query.answer("Удаление отменено!")
     lesson_info = get_lesson_info(query.from_user.id, subject_number, day_offset, week_parity_int)
 
@@ -326,7 +325,7 @@ async def add_lesson(query: CallbackQuery, state: FSMContext):
         row = available_lesson_times[i:i + row_width]
         times.append([KeyboardButton(text=f"{start_time} - {end_time}") for start_time, end_time in row])
 
-    await state.update_data(availibale_times=formatted_intervals)
+    await state.update_data(available_times=formatted_intervals)
 
     times.append([KeyboardButton(text="Пропустить добавление♻️")])
     times_markup = ReplyKeyboardMarkup(keyboard=times, resize_keyboard=True, one_time_keyboard=True)
@@ -350,7 +349,7 @@ async def add_lesson(query: CallbackQuery, state: FSMContext):
 async def process_time(message: Message, state: FSMContext):
     time = message.text
     data = await state.get_data()
-    available_times = data.get('availibale_times')
+    available_times = data.get('available_times')
 
     if time not in available_times:
         await message.answer(text="<b>Пожалуйста, выберите время из предоставленных вариантов.</b>",
@@ -558,8 +557,7 @@ async def adding_to_database(message: Message, state: FSMContext):
     evaluation = evaluation_mapping.get(evaluation, None)
 
     classroom = data.get('classroom')
-    query = data.get('query')
-    user_id = query.from_user.id
+    user_id = message.from_user.id
     add_lesson_to_schedule(user_id, week_parity_id, teacher_name, subject, lesson_type,
                            evaluation, classroom, lesson_number_for_time)
-    await select_week_day(query, state, True, False, True)
+    await select_week_day(user_id, message.chat.id, message.message_id, state, True, False, True)
