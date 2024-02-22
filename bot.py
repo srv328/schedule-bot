@@ -16,7 +16,8 @@ from utils.bot_entity import bot
 async def main():
     storage = RedisStorage.from_url('redis://localhost:6379/0')
     dp = Dispatcher(storage=storage)
-    dp.message.middleware.register(ThrottlingMiddleware(storage=storage))
+    throttling_storage = RedisStorage.from_url('redis://localhost:6379/1')
+    dp.message.middleware.register(ThrottlingMiddleware(storage=throttling_storage))
     dp.include_routers(start_command.router,
                        accont_info.router,
                        faq.router,
