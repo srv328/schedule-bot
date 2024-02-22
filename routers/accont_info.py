@@ -20,9 +20,9 @@ async def send_user_info(message: Message, user_id, full_name, registration_date
         f"<b>🆔:</b> <code>{user_id}</code>\n"
         f"<b>Имя:</b> <i>{full_name}</i>\n"
         f"<b>Дата регистрации</b>: {registration_date}\n"
-        f"<b>Ваша персональная ссылка:</b> "
+        f"<b>Ваша персональная ссылка: 🔗</b> "
         f"<a href='https://t.me/FEFUDVFU_bot?start={user_id}'>ссылка</a>\n"
-        f"Воспользуйтесь ей, чтобы <b>поделиться</b> своим расписанием!",
+        f"Воспользуйтесь ей, чтобы <b>поделиться своим расписанием!</b>",
         reply_markup=inline_markup,
         parse_mode=ParseMode.HTML
     )
