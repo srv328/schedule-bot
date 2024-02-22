@@ -1,10 +1,30 @@
-from aiogram import Router
 from aiogram.types import InlineQueryResultArticle, InlineQuery, InputTextMessageContent
 from aiogram.enums.parse_mode import ParseMode
-from work_with_db import get_schedule_statistics
-from utils import generate_schedule_statistics_message
+from utils.work_with_db import get_schedule_statistics
+from utils.utilities import generate_schedule_statistics_message
+from aiogram import Router
 
 router = Router()
+
+
+@router.inline_query(lambda query: query.query.startswith('Сс') or query.query.startswith('сс'))
+async def default(query: InlineQuery):
+    inline = [
+                InlineQueryResultArticle(
+                    id='3',
+                    title="Поделиться ссылкой на бота",
+                    description="Нажмите, чтобы поделиться ссылкой",
+                    input_message_content=InputTextMessageContent(
+                        message_text=f"Настрой своё расписание в несколько кликов! "
+                                     f"<a href='https://t.me/FEFUDVFU_bot'>@FEFUDVFU_bot</a>",
+                        parse_mode=ParseMode.HTML
+                    ),
+                    thumb_url="https://sun1-83.userapi.com/s/v1/ig2/GAG4M-nEEH2uw43iclr"
+                              "QMZNG-_8vRfm23f_Ol5Tv-xerA8bTF94BMIXTVhBkm41UV2Fpo3iUN2J"
+                              "h6hljOEPWl7VR.jpg?size=100x100&quality=95&crop=0,0,1080,1080&ava=1"
+                )
+            ]
+    await query.answer(inline, cache_time=5, is_personal=False)
 
 
 @router.inline_query(lambda query: query.query.startswith(''))
@@ -33,18 +53,6 @@ async def default(query: InlineQuery):
     schedule_result = [
         InlineQueryResultArticle(
             id='1',
-            title="Поделиться ссылкой на бота",
-            description="Нажмите, чтобы поделиться ссылкой",
-            input_message_content=InputTextMessageContent(
-                message_text=f"Настрой своё расписание в несколько кликов! "
-                             f"<a href='https://t.me/FEFUDVFU_bot'>@FEFUDVFU_bot</a>",
-                parse_mode=ParseMode.HTML
-            ),
-            thumb_url="https://sun1-83.userapi.com/s/v1/ig2/GAG4M-nEEH2uw43iclrQMZNG-_8vRfm23f_Ol5Tv-xerA8bTF94BMIXTVhB"
-                      "km41UV2Fpo3iUN2Jh6hljOEPWl7VR.jpg?size=100x100&quality=95&crop=0,0,1080,1080&ava=1"
-        ),
-        InlineQueryResultArticle(
-            id='2',
             title="Поделиться расписанием",
             description="Нажмите, чтобы отправить ваше расписание",
             input_message_content=InputTextMessageContent(
@@ -55,7 +63,7 @@ async def default(query: InlineQuery):
                       "date-google-calendar-calendar-icon-purple-violet.png"
         ),
         InlineQueryResultArticle(
-            id='3',
+            id='2',
             title="Поделиться статистикой",
             description="Нажмите, чтобы отправить вашу статистику",
             input_message_content=InputTextMessageContent(
