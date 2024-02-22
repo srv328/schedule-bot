@@ -1,18 +1,23 @@
 from aiogram.types import CallbackQuery, KeyboardButton, ReplyKeyboardMarkup
-from aiogram import Router, F
+from aiogram import F
 from aiogram.types import Message
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from utils import get_number_of_subject_emoji, day_translation, day_of_week_dict, get_lesson_info, \
-    day_translation_form, get_available_lesson_times, bot
+from utils.utilities import (
+    get_number_of_subject_emoji, day_translation, day_of_week_dict, get_lesson_info,
+    day_translation_form, get_available_lesson_times
+)
+from utils.bot_entity import bot
 from contextlib import suppress
 from aiogram.exceptions import TelegramBadRequest
-from work_with_db import get_schedule_by_day_offset, delete_lesson_by_params, add_lesson_to_schedule
-from keyboards import parity_markup, days_markup, manage_markup, yes_no_button, lesson_type_markup, \
+from utils.work_with_db import get_schedule_by_day_offset, delete_lesson_by_params, add_lesson_to_schedule
+from utils.keyboards import (
+    parity_markup, days_markup, manage_markup, yes_no_button, lesson_type_markup,
     lesson_priority_markup, cancel_markup, schedule_markup
-
+)
+from aiogram import Router
 
 router = Router()
 

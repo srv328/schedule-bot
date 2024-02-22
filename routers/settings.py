@@ -1,23 +1,25 @@
-from aiogram import F, Router
+from aiogram import F
 from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from contextlib import suppress
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.exceptions import TelegramBadRequest
-from work_with_db import (
+from utils.bot_entity import bot
+from utils.work_with_db import (
     get_current_notifications_status, update_notifications, update_notifications_status,
     get_current_notifications, get_schedule_statistics, has_backup, create_backup, has_schedule,
     get_time_from_backup_schedule, delete_backup, load_schedule_from_backup
 )
-from keyboards import (
+from utils.keyboards import (
     settings_markup, savings_markup, backup_markup,
     create_text_button, create_keyboard_markup, confirm_backup
 )
-from utils import (
-    export_schedule_to_txt, create_excel_schedule, bot,
+from utils.utilities import (
+    export_schedule_to_txt, create_excel_schedule,
     get_formatted_date, generate_schedule_statistics_message
 )
+from aiogram import Router
 
 router = Router()
 

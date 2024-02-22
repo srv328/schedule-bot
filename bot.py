@@ -1,20 +1,19 @@
 import sys
 import asyncio
 import logging
-
-from anti_flood import ThrottlingMiddleware
-from config import token
+from utils.anti_flood import ThrottlingMiddleware
 from aiogram.fsm.storage.redis import RedisStorage
-from aiogram import Bot, Dispatcher
+from aiogram import Dispatcher
 from routers import (
     start_command, inline, accont_info, faq,
     statistic, today_schedule, tomorrow_schedule, settings,
-    week_schedule, clear_schedule, next_lesson, editing, admin_panel
+    week_schedule, clear_schedule, next_lesson, editing, admin_panel,
+    other_messages
 )
+from utils.bot_entity import bot
 
 
 async def main():
-    bot = Bot(token=token)
     storage = RedisStorage.from_url('redis://localhost:6379/0')
     dp = Dispatcher(storage=storage)
     dp.message.middleware.register(ThrottlingMiddleware(storage=storage))
@@ -30,7 +29,8 @@ async def main():
                        clear_schedule.router,
                        next_lesson.router,
                        editing.router,
-                       admin_panel.router)
+                       admin_panel.router,
+                       other_messages.router)
     try:
         await dp.start_polling(bot)
     except Exception as ex:

@@ -1,20 +1,21 @@
-from aiogram import Router, types
+from aiogram import types
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from config import admins
-from keyboards import menu_markup, yes_no_button, admin_markup
-from work_with_db import check_user_exists, add_user_to_database, has_schedule, copy_schedule
-from utils import extract_unique_code, bot
+from utils.keyboards import menu_markup, yes_no_button, admin_markup
+from utils.work_with_db import check_user_exists, add_user_to_database, has_schedule, copy_schedule
+from utils.utilities import extract_unique_code
+from utils.bot_entity import bot
+from aiogram import Router
+
+router = Router()
 
 
 class Share(StatesGroup):
     ans = State()
-
-
-router = Router()
 
 
 async def start_command(message: Message, state: FSMContext):

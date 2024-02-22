@@ -1,8 +1,9 @@
-from aiogram import Router, F
+from aiogram import F
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, FSInputFile
 from aiogram.enums.parse_mode import ParseMode
-from work_with_db import get_schedule_statistics
-from utils import generate_schedule_statistics_message
+from utils.work_with_db import get_schedule_statistics
+from utils.utilities import generate_schedule_statistics_message
+from aiogram import Router
 
 router = Router()
 

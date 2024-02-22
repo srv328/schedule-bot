@@ -1,8 +1,9 @@
-from aiogram import Router, F
+from aiogram import F
 from aiogram.types import Message, FSInputFile
 from aiogram.enums.parse_mode import ParseMode
-from work_with_db import get_schedule_by_day_offset
-from utils import day_of_week_dict, generate_schedule_response, get_week_parity, get_local_time
+from utils.work_with_db import get_schedule_by_day_offset
+from utils.utilities import day_of_week_dict, generate_schedule_response, get_week_parity, get_local_time
+from aiogram import Router
 
 router = Router()
 
