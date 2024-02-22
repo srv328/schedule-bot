@@ -85,6 +85,7 @@ async def select_week_parity(query: CallbackQuery, state: FSMContext):
 
 async def select_week_day(user_id: int, chat_id: int, message_id: int,
                           state: FSMContext, cancel=False, show=True, add=False):
+    await state.set_state(Edit.day)
     data = await state.get_data()
     week_parity = data.get('week_parity')
     selected_day = data.get('day')
@@ -96,7 +97,6 @@ async def select_week_day(user_id: int, chat_id: int, message_id: int,
     schedule_data = get_schedule_by_day_offset(user_id, day_offset % 7, week_parity_int)
 
     keyboard_buttons = []
-
     builder = InlineKeyboardBuilder()
     if not schedule_data:
         builder.button(
