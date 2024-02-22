@@ -341,7 +341,7 @@ async def add_lesson(query: CallbackQuery, state: FSMContext):
 @router.message(AddLesson.Time, F.text.in_(['8:30 - 10:00',
                                             '10:10 - 11:40',
                                             '11:50 - 13:20',
-                                            '13:20 - 15:00',
+                                            '13:30 - 15:00',
                                             '15:10 - 16:40',
                                             '16:50 - 18:20',
                                             '18:30 - 20:00',

@@ -3,7 +3,7 @@ from aiogram.types import Message, FSInputFile
 from aiogram.enums.parse_mode import ParseMode
 from datetime import timedelta
 from work_with_db import get_schedule_by_day_offset
-from utils import day_of_week_dict, generate_schedule_response, get_week_parity, get_number_of_week
+from utils import day_of_week_dict, generate_schedule_response, get_week_parity, get_local_time
 
 router = Router()
 
@@ -11,7 +11,7 @@ router = Router()
 @router.message(F.text == "На завтра📚")
 async def get_schedule_tomorrow(message: Message):
 
-    current_number_day = get_number_of_week()
+    current_number_day = get_local_time()
     next_day_of_week = current_number_day + timedelta(days=1)
     next_day_of_week_number = next_day_of_week.isoweekday()
 

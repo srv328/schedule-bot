@@ -216,6 +216,11 @@ def delete_backup(user_id):
     execute_query(query, user_id)
 
 
+def delete_schedule(user_id):
+    query = "DELETE FROM schedule WHERE user_id = ?"
+    execute_query(query, user_id)
+
+
 def load_schedule_from_backup(user_id):
     delete_query = "DELETE FROM schedule WHERE user_id = ?"
     execute_query(delete_query, user_id)

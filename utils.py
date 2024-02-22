@@ -95,24 +95,9 @@ def get_formatted_date():
     return formatted_date
 
 
-def get_number_of_week():
+def get_local_time():
     current_time_local = datetime.now(pytz.timezone('Asia/Vladivostok'))
     return current_time_local
-
-
-def format_time(seconds):
-    hours, remainder = divmod(seconds, 3600)
-    minutes, seconds = divmod(remainder, 60)
-
-    time_str = ''
-    if hours > 0:
-        time_str += f"{int(hours)} ч. "
-    if minutes > 0 or (hours == 0 and time_str == ''):
-        time_str += f"{int(minutes)} мин. "
-    if seconds > 0 or (hours == 0 and minutes == 0):
-        time_str += f"{int(seconds)} сек."
-
-    return time_str
 
 
 def format_time_str(days, hours, minutes, seconds):
@@ -135,7 +120,7 @@ def format_time_str(days, hours, minutes, seconds):
 
 def get_days_of_week():
 
-    current_time_local = get_number_of_week()
+    current_time_local = get_local_time()
     start_of_week = current_time_local - timedelta(days=current_time_local.weekday())
     week_dates = []
 
@@ -148,7 +133,7 @@ def get_days_of_week():
 
 
 def get_next_two_weeks_dates():
-    current_time_local = get_number_of_week()
+    current_time_local = get_local_time()
     start_date = current_time_local.date()
     two_weeks_dates = []
 

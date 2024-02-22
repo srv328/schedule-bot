@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, FSInputFile
 from aiogram.enums.parse_mode import ParseMode
 from work_with_db import get_schedule_by_day_offset
-from utils import day_of_week_dict, generate_schedule_response, get_week_parity, get_number_of_week
+from utils import day_of_week_dict, generate_schedule_response, get_week_parity, get_local_time
 
 router = Router()
 
@@ -10,7 +10,7 @@ router = Router()
 @router.message(F.text == "На сегодня📖")
 async def get_schedule_today(message: Message):
 
-    current_time = get_number_of_week()
+    current_time = get_local_time()
     current_day_of_week = current_time.isoweekday()
 
     if current_day_of_week == 7:

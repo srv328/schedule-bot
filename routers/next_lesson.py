@@ -5,8 +5,7 @@ from aiogram.types import Message
 import re
 from aiogram.enums.parse_mode import ParseMode
 from work_with_db import get_schedule_by_day_offset
-from utils import get_number_of_week, get_week_parity, generate_schedule_response, \
-    format_time, format_time_str, get_next_two_weeks_dates
+from utils import get_local_time, get_week_parity, generate_schedule_response, format_time_str, get_next_two_weeks_dates
 from datetime import datetime
 from keyboards import next_lesson_markup, schedule_markup
 
@@ -40,7 +39,7 @@ async def current_lesson(message: Message, state: FSMContext):
     await state.set_state(ReturnButton.return_to_schedule)
     user_id = message.from_user.id
 
-    current_time = get_number_of_week()
+    current_time = get_local_time()
     current_day_of_week = current_time.isoweekday()
     time_now = current_time.time()
 
@@ -70,7 +69,9 @@ async def current_lesson(message: Message, state: FSMContext):
 
         if time_until_end_seconds > 0:
             # форматирование времени до конца пары
-            time_until_end_str = format_time(time_until_end_seconds)
+            hours, remainder = divmod(time_until_end_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            time_until_end_str = format_time_str(0, hours, minutes, seconds)
 
             # добавление времени до конца пары в текст сообщения
             current_lesson_text += f"\n<b>До конца пары осталось:</b> {time_until_end_str}"
@@ -93,7 +94,7 @@ async def next_lesson(message: Message, state: FSMContext):
     await state.set_state(ReturnButton.return_to_schedule)
     user_id = message.from_user.id
 
-    current_time = get_number_of_week()
+    current_time = get_local_time()
     current_day_of_week = current_time.isoweekday()
     time_now = current_time.time()
 
@@ -135,8 +136,7 @@ async def next_lesson(message: Message, state: FSMContext):
 
     day_of_week_dict = {1: "понедельник", 2: "вторник", 3: "среда", 4: "четверг", 5: "пятница", 6: "суббота",
                         7: "понедельник", 8: "вторник", 9: "среда", 10: "четверг", 11: "пятница", 12: "суббота"}
-    for x in schedule:
-        print(x)
+
     try:
         pair = schedule[0][0]
 
@@ -162,6 +162,7 @@ async def next_lesson(message: Message, state: FSMContext):
             minutes, seconds = divmod(remainder, 60)
 
             time_left_str = format_time_str(days, hours, minutes, seconds)
+
             new_date_str = schedule[0][1][:-5]
             lesson = lesson.replace('Расписание на 🗓', f'Следующая пара будет: {new_date_str}🗓\n({day})', -1)
 

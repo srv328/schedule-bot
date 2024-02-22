@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery, FSInputFile
 from utils import bot
 from aiogram.enums.parse_mode import ParseMode
 from keyboards import clear_button, schedule_markup
-from work_with_db import has_schedule, execute_query
+from work_with_db import has_schedule, delete_schedule
 
 
 router = Router()
@@ -28,8 +28,7 @@ async def clear_schedule(message: Message):
 
 @router.callback_query(lambda query: query.data == 'yes_clear')
 async def clear_yes(query: CallbackQuery):
-    delete_query = "DELETE FROM schedule WHERE user_id = ?"
-    execute_query(delete_query, query.from_user.id)
+    delete_schedule(query.from_user.id)
     await bot.delete_message(chat_id=query.from_user.id, message_id=query.message.message_id)
     await query.message.answer(text="<b>Расписание успешно очищено!</b>",
                                parse_mode=ParseMode.HTML,
