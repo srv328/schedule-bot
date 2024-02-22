@@ -1,15 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
-
-
-def create_keyboard_markup(buttons, is_inline=False, times=False):
-    return InlineKeyboardMarkup(inline_keyboard=buttons) if is_inline else ReplyKeyboardMarkup(keyboard=buttons,
-                                                                                               resize_keyboard=True,
-                                                                                               one_time_keyboard=times)
-
-
-def create_text_button(text, callback_data=None):
-    return InlineKeyboardButton(text=text, callback_data=callback_data) if callback_data else KeyboardButton(text=text)
-
+from utils.utilities import create_keyboard_markup, create_text_button
 
 menu_buttons = [
     [create_text_button("Расписание🗓"),

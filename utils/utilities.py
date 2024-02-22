@@ -1,17 +1,38 @@
 from datetime import datetime, timedelta
 import random
 import pytz
-from aiogram import Bot
 from aiogram.enums import ParseMode
-from config import start_day, start_month, token
+from config import start_day, start_month
 from aiogram.types import Message, FSInputFile
-from work_with_db import has_schedule, get_schedule_by_day_offset, get_lesson_by_params_with_user,\
+from utils.work_with_db import has_schedule, get_schedule_by_day_offset, get_lesson_by_params_with_user,\
     execute_query, get_existing_lessons
 import os
 from openpyxl.styles import PatternFill
 import openpyxl
+from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
+from utils.bot_entity import bot
 
-bot = Bot(token=token)
+
+def create_keyboard_markup(buttons, is_inline=False, times=False):
+    return InlineKeyboardMarkup(inline_keyboard=buttons) if is_inline else ReplyKeyboardMarkup(keyboard=buttons,
+                                                                                               resize_keyboard=True,
+                                                                                               one_time_keyboard=times)
+
+
+def create_text_button(text, callback_data=None):
+    return InlineKeyboardButton(text=text, callback_data=callback_data) if callback_data else KeyboardButton(text=text)
+
+
+def generate_default_share_keyboard():
+    return [[InlineKeyboardButton(
+        text='Поделиться ссылкой на бота',
+        switch_inline_query=f'Ссылка')]]
+
+
+def generate_share_keyboard():
+    return [[InlineKeyboardButton(
+        text='Поделиться расписанием',
+        switch_inline_query=f'Расписание')]]
 
 
 day_of_week_dict = {
@@ -224,7 +245,7 @@ async def create_excel_schedule(message: Message):
         await message.answer(text='<b>Ваше расписание не содержит занятий!</b>\n'
                                   '<b>Сгенерировать файл невозможно.</b>',
                              parse_mode=ParseMode.HTML)
-        video = FSInputFile("media/расписание пустое 2.mp4")
+        video = FSInputFile("../media/расписание пустое 2.mp4")
         await message.answer_video(video)
         return
 
@@ -304,7 +325,7 @@ async def export_schedule_to_txt(message: Message):
         await message.answer(text='<b>Ваше расписание не содержит занятий!</b>\n'
                                   '<b>Сгенерировать файл невозможно.</b>',
                              parse_mode=ParseMode.HTML)
-        video = FSInputFile("media/расписание пустое.mp4")
+        video = FSInputFile("../media/расписание пустое.mp4")
         await message.answer_video(video)
         return
 
