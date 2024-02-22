@@ -1,6 +1,8 @@
 import sys
 import asyncio
 import logging
+
+from anti_flood import ThrottlingMiddleware
 from config import token
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram import Bot, Dispatcher
@@ -15,6 +17,7 @@ async def main():
     bot = Bot(token=token)
     storage = RedisStorage.from_url('redis://localhost:6379/0')
     dp = Dispatcher(storage=storage)
+    dp.message.middleware.register(ThrottlingMiddleware(storage=storage))
     dp.include_routers(start_command.router,
                        accont_info.router,
                        faq.router,
