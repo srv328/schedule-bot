@@ -13,7 +13,10 @@ router = Router()
 async def clear_schedule(message: Message):
     if has_schedule(message.from_user.id):
         await message.answer(text="Вы уверены, что хотите очистить расписание?\n"
-                                  "<b>Внимание</b>❗️\nЭто действие <b>нельзя отменить</b>⚠", reply_markup=clear_button,
+                                  "<b>Внимание</b>❗️\nЭто действие <b>нельзя отменить</b>⚠\n"
+                                  "Перед очисткой расписания <b>настоятельно рекомендуется</b> сохранить ваше текущее "
+                                  "расписание в <b>настройках</b>",
+                             reply_markup=clear_button,
                              parse_mode=ParseMode.HTML)
     else:
         await message.answer(text="<b>Расписание пустое, нечего очищать!</b>",
