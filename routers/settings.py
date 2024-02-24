@@ -1,5 +1,5 @@
 from aiogram import F
-from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, FSInputFile
 from contextlib import suppress
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.context import FSMContext
@@ -125,6 +125,8 @@ async def txt_schedule_sending(message: Message, state: FSMContext):
     user_id = message.from_user.id
     even_schedule, odd_schedule = get_schedule_statistics("schedule", user_id)
     await export_schedule_to_txt(message)
+    video = FSInputFile("media/расписание пустое.mp4")
+    await message.answer_video(video)
 
 
 @router.message(F.text == "Экспорт в .xlsx📂")
@@ -133,6 +135,8 @@ async def xslx_schedule_sending(message: Message, state: FSMContext):
     user_id = message.from_user.id
     even_schedule, odd_schedule = get_schedule_statistics("schedule", user_id)
     await create_excel_schedule(message)
+    video = FSInputFile("media/расписание пустое 2.mp4")
+    await message.answer_video(video)
 
 
 @router.message(F.text == "Загрузить расписание♻️")

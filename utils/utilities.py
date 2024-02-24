@@ -245,8 +245,6 @@ async def create_excel_schedule(message: Message):
         await message.answer(text='<b>Ваше расписание не содержит занятий!</b>\n'
                                   '<b>Сгенерировать файл невозможно.</b>',
                              parse_mode=ParseMode.HTML)
-        video = FSInputFile("../media/расписание пустое 2.mp4")
-        await message.answer_video(video)
         return
 
     workbook = openpyxl.Workbook()
@@ -325,8 +323,6 @@ async def export_schedule_to_txt(message: Message):
         await message.answer(text='<b>Ваше расписание не содержит занятий!</b>\n'
                                   '<b>Сгенерировать файл невозможно.</b>',
                              parse_mode=ParseMode.HTML)
-        video = FSInputFile("../media/расписание пустое.mp4")
-        await message.answer_video(video)
         return
 
     with open(f"temp/{user_id}.txt", "w", encoding="utf-8") as file:
