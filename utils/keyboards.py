@@ -78,6 +78,14 @@ week_buttons = [
 
 week_markup = create_keyboard_markup(week_buttons, True)
 
+sender_buttons = [
+    [create_text_button("Да🍒", "yes_sender"),
+     create_text_button("Нет🍇", "no_sender")]
+]
+
+sender = create_keyboard_markup(sender_buttons, True)
+
+
 back_button_this = create_keyboard_markup([[create_text_button("Назад🔙", "back_to_week_this")]], True)
 back_button_next = create_keyboard_markup([[create_text_button("Назад🔙", "back_to_week_next")]], True)
 
