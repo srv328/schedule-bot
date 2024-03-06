@@ -124,9 +124,9 @@ async def txt_schedule_sending(message: Message, state: FSMContext):
     await state.set_state(ReturnButton.return_to_settings)
     user_id = message.from_user.id
     even_schedule, odd_schedule = get_schedule_statistics("schedule", user_id)
-    await export_schedule_to_txt(message)
-    video = FSInputFile("media/расписание пустое.mp4")
-    await message.answer_video(video)
+    if not await export_schedule_to_txt(message):
+        video = FSInputFile("media/расписание пустое.mp4")
+        await message.answer_video(video)
 
 
 @router.message(F.text == "Экспорт в .xlsx📂")
@@ -134,9 +134,9 @@ async def xslx_schedule_sending(message: Message, state: FSMContext):
     await state.set_state(ReturnButton.return_to_settings)
     user_id = message.from_user.id
     even_schedule, odd_schedule = get_schedule_statistics("schedule", user_id)
-    await create_excel_schedule(message)
-    video = FSInputFile("media/расписание пустое 2.mp4")
-    await message.answer_video(video)
+    if not await create_excel_schedule(message):
+        video = FSInputFile("media/расписание пустое 2.mp4")
+        await message.answer_video(video)
 
 
 @router.message(F.text == "Загрузить расписание♻️")
