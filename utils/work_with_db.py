@@ -12,6 +12,53 @@ def get_time_from_backup_schedule(user_id):
         return result[0][0]
 
 
+def delete_campaign_table(table_name):
+    connection = sqlite3.connect(database_path)
+    try:
+        cursor = connection.cursor()
+        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+        connection.commit()
+        return True
+
+    except Exception as e:
+        print(f"Error deleting table {table_name}: {e}")
+        return False
+
+    finally:
+        connection.close()
+
+
+async def create_table_if_not_exists(table_name):
+    conn = sqlite3.connect(database_path)
+    cursor = conn.cursor()
+    create_table_query = f'''
+        CREATE TABLE IF NOT EXISTS {table_name} (
+            user_id INTEGER PRIMARY KEY,
+            status TEXT,
+            description TEXT
+        );
+    '''
+    cursor.execute(create_table_query)
+    insert_data_query = f'''
+        INSERT INTO {table_name} (user_id, status, description)
+        SELECT user_id, 'waiting', NULL FROM users;
+    '''
+    cursor.execute(insert_data_query)
+
+    conn.commit()
+    conn.close()
+
+
+async def check_table_exists(table_name):
+    conn = sqlite3.connect(database_path)
+    cursor = conn.cursor()
+    query = f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'"
+    cursor.execute(query)
+    result = cursor.fetchone()
+    conn.close()
+    return result is not None
+
+
 def add_lesson_to_schedule(user_id, week_parity_id, tutor_name, subject_name, is_practice,
                            subject_priority, subject_place, lesson_time_id):
     query = """
