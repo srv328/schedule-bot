@@ -239,13 +239,13 @@ def get_number_of_subject_emoji(subject_number):
     return number_of_subject.get(subject_number, "Недопустимый индекс")
 
 
-async def create_excel_schedule(message: Message):
+async def create_excel_schedule(message: Message) -> bool:
     user_id = message.from_user.id
     if not has_schedule(user_id):
         await message.answer(text='<b>Ваше расписание не содержит занятий!</b>\n'
                                   '<b>Сгенерировать файл невозможно.</b>',
                              parse_mode=ParseMode.HTML)
-        return
+        return False
 
     workbook = openpyxl.Workbook()
     workbook.remove(workbook.active)  # Удаляем активный лист по умолчанию
@@ -315,15 +315,16 @@ async def create_excel_schedule(message: Message):
                             chat_id=user_id,
                             parse_mode=ParseMode.HTML)
     os.remove(f'temp/{user_id}_schedule.xlsx')
+    return True
 
 
-async def export_schedule_to_txt(message: Message):
+async def export_schedule_to_txt(message: Message) -> bool:
     user_id = message.from_user.id
     if not has_schedule(user_id):
         await message.answer(text='<b>Ваше расписание не содержит занятий!</b>\n'
                                   '<b>Сгенерировать файл невозможно.</b>',
                              parse_mode=ParseMode.HTML)
-        return
+        return False
 
     with open(f"temp/{user_id}.txt", "w", encoding="utf-8") as file:
         days_of_week = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
@@ -361,6 +362,7 @@ async def export_schedule_to_txt(message: Message):
                             chat_id=user_id,
                             parse_mode=ParseMode.HTML)
     os.remove(f'temp/{user_id}.txt')
+    return True
 
 
 def generate_schedule_statistics_message(even_schedule, odd_schedule):
