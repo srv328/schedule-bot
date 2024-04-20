@@ -106,7 +106,7 @@ async def decide(query: CallbackQuery, state: FSMContext, bot: Bot):
         data = await state.get_data()
         table_name = data.get('table_name')
         if delete_campaign_table(table_name):
-            await query.message.answer('Рассылка отменена. Кампания была удалена.', reply_markup=ReplyKeyboardRemove())
+            await query.message.answer('Рассылка отменена. Кампания была удалена.')
         else:
             await query.message.answer('Не верю. Проверь код.')
     await state.clear()
@@ -120,7 +120,8 @@ async def confirm(message: Message, state: FSMContext, bot: Bot):
     text_button = data.get('text_button') if data.get('text_button') else None
     message_chat_id = data.get('message_chat_id')
     message_id = data.get('message_id')
-    but = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=text_button, url=url)]]) if url and text_button else None
+    but = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=text_button, url=url)]]) \
+        if url and text_button else None
     await bot.copy_message(message_chat_id, message_chat_id, message_id, reply_markup=but)
 
 
@@ -133,7 +134,7 @@ async def export_database(message: Message):
         return
     if path.exists(database_path):
         try:
-            db = FSInputFile(database_path, f"db_{get_formatted_date()}.db")
+            db = FSInputFile(database_path, f"db_{get_formatted_date()}.sqlite3")
             await message.answer_document(db)
         except TelegramBadRequest:
             await message.answer("<b>БД пустая!</b>", parse_mode=ParseMode.HTML)
@@ -142,7 +143,7 @@ async def export_database(message: Message):
 
 
 @router.message(F.text == "Выгрузить лог🗒")
-async def export_database(message: Message):
+async def export_log(message: Message):
     if str(message.from_user.id) not in admins:
         gif = FSInputFile("media/админ.mp4")
         await message.answer('<b>Куда мы лезем?</b>', parse_mode=ParseMode.HTML)

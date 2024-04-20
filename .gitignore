@@ -1,6 +1,6 @@
 config.py
 query.sql
 requirements.txt
-database.db
+database.sqlite3
 .idea
 logs.log
